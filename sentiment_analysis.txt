@@ -1,0 +1,186 @@
+import pandas as pd
+df = pd.read_csv('C:\\Users\\alifs\\new_folder\\IMDB Dataset.csv',  engine='python')
+
+print(df.info())
+
+print(df.head(10))
+
+print(df.columns)
+
+print(df['review'])
+
+df.rename(columns={'review':"comment",'sentiment':'class'},inplace=True)
+
+print(df.head(10))
+
+neg_comment = df[df['class']=='negative']
+print(len(neg_comment))
+print(type(neg_comment))
+
+pos_comment = df[df['class']=='positive']
+print(len(pos_comment))
+
+neg_comment = neg_comment.iloc[:1500]
+pos_comment = pos_comment.iloc[:1500]
+print(len(neg_comment))
+print(len(pos_comment))
+
+total_comment = len(neg_comment)+len(pos_comment)
+percent_pos = len(pos_comment)/total_comment
+percent_neg = len(neg_comment)/total_comment
+print("positive="+str(percent_pos))
+print("negative="+str(percent_neg))
+
+
+print(neg_comment)
+
+
+print(type(neg_comment))
+
+print(type(neg_comment['comment']))
+
+neg_list = neg_comment['comment'].tolist()
+print(neg_list)
+print(len(neg_list))
+
+
+pos_list = pos_comment['comment'].tolist()
+print(len(pos_list))
+
+
+neg_count = [ comment.strip(".").split() for comment in neg_list]
+
+print(neg_count)
+
+temp = []
+for comment in neg_count:
+    temp=temp+comment
+    
+print(temp)
+
+
+from collections import Counter
+
+
+neg_counter = Counter(temp)
+print(neg_counter)
+
+
+pos_count = [ comment.strip(".").split() for comment in pos_list]
+temp1 = []
+for comment in pos_count:
+    temp1=temp1+comment
+    
+print(temp1)
+
+
+pos_counter = Counter(temp1)
+print(pos_counter)
+
+
+
+
+total_pos = sum(pos_counter.values())
+print("total positive="+str(total_pos))
+total_neg = sum(neg_counter.values())
+print("total negative="+str(total_neg))
+pos_probability = 1
+neg_probability = 1
+
+
+#comment
+comment = "he is a just an excellent teacher."
+
+
+review_words = comment.lower().split()
+print(review_words)
+
+
+for word in review_words:
+    word_in_pos = pos_counter[word]
+    word_in_neg = neg_counter[word]
+
+
+    pos_probability *= (word_in_pos + 1) / (total_pos + len(pos_counter))
+    neg_probability *= (word_in_neg + 1) / (total_neg + len(neg_counter))
+
+print(pos_probability)
+print(neg_probability)
+final_pos = pos_probability * percent_pos
+final_neg = neg_probability * percent_neg
+
+
+
+print(final_pos)
+print(final_neg)
+
+if final_pos > final_neg:
+    feature_value = 1
+    print("The comment is positive")
+else:
+    feature_value = 0
+    print("The comment is negative")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
